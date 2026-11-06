@@ -1,0 +1,32 @@
+Add the "Core Leadership Pillars" section directly beneath the Hero on our portfolio page, inspired by the "Vision matched with the discipline to deliver" section of thanneeruharishrao.org.
+
+Section ID: #vision
+Section Header:
+- Small eyebrow tag: "LEADERSHIP & VALUES"
+- Headline: "A Relentless Journey Rooted in Telangana Soil"
+- Sub-headline: "From student barricades at Kakatiya University to national consumer advocacy and party leadership, Dr. Srikanth Goud combines intellectual rigor with grassroots fidelity."
+
+Create a clean 4-card responsive editorial grid with hover lift effects, subtle border treatments, and Lucide icons:
+
+1. Card 1: Telangana Movement & Self-Respect
+- Icon: Flame / Flag
+- Description: "Joined the statehood movement in 2004 under BRS and TRSV. Mobilised thousands of student leaders across Warangal, braved police charges, and stood at the frontline of agitations for Telangana identity."
+- Highlight Tag: "2004–2014 Movement Leader"
+
+2. Card 2: Grassroots Cadre Builder & Trusted Associate
+- Icon: Users / Shield
+- Description: "Trusted frontline defender of Smt. Kalvakuntla Kavitha through both triumph and political adversity. Served as Balkonda Incharge (2014) and State President of Telangana Jagruthi, building disciplined ground-level cadre networks."
+- Highlight Tag: "Cadre Architect"
+
+3. Card 3: Social Justice, OBC Rights & Employee Advocacy
+- Icon: Scale / GraduationCap
+- Description: "Staunch crusader for OBC constitutional reservations at Central Universities (HCU Satyagraha Deeksha). Led investigative committees for outsourcing and contract employees across state healthcare infrastructure."
+- Highlight Tag: "Social Equity Voice"
+
+4. Card 4: Consumer Rights Protection & Public Redressal
+- Icon: Award / HeartPulse
+- Description: "As National Chairman of World Consumer Rights and NCRC Telangana Chairman, led nationwide drives against market exploitation, consumer fraud, and spearheaded critical food and supply logistics during the COVID-19 pandemic (Recognized Corona Warrior)."
+- Highlight Tag: "Public Welfare Steward"
+
+Include a quote highlight banner below the cards:
+"True leadership is defined not by titles, but by standing unwavering with the people during their most vulnerable challenges." — Dr. Nalamasa Srikanth Goud

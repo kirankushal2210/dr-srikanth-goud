@@ -1,0 +1,42 @@
+Refactor our portfolio website to give it a distinct, cutting-edge identity that separates it completely from traditional static political websites. Infuse modern micro-interactions, smooth CSS transitions, and the official TRS Party colors (Marigold Yellow #FACC15, Deep Forest Green #062319, and Azure Sky Blue #38BDF8).
+
+Execute all changes across styles and components in a single pass:
+
+1. Update `src/index.css` with Custom Animations & Ambient Glows:
+Add these self-contained animations and utility classes:
+- `@keyframes marquee`: Infinite horizontal ticker scroll for public announcements and designations.
+- `@keyframes floatGlow`: Slow breathing pulse for the hero background lighting.
+- `@keyframes trsShimmer`: A subtle gradient movement across card borders on hover.
+- `.trs-card`: Glassmorphic dark emerald surface (`bg-[#0A2E22]/70 backdrop-blur-md border border-[#144A38] hover:border-[#FACC15]/60 hover:-translate-y-1.5 transition-all duration-300 hover:shadow-[0_12px_30px_-10px_rgba(250,204,21,0.25)]`).
+- `.trs-gradient-text`: Text gradient from `#FACC15` to `#38BDF8`.
+- `.trs-tricolor-border`: A sleek top or bottom border using `linear-gradient(90deg, #FACC15 0%, #16A34A 50%, #38BDF8 100%)`.
+
+2. Add a Dynamic Marquee Ticker Component (`src/components/ui/MarqueeTicker.tsx`):
+- Create a continuous, smooth scrolling ribbon placed directly beneath the Hero and above the Footer.
+- Styling: Deep green background (`#062319`) with a 1px gold border and glowing yellow stars/badges.
+- Items repeating seamlessly:
+  "★ DR. NALAMASA SRIKANTH GOUD"
+  "★ STATE OFFICIAL SPOKESPERSON, TRS"
+  "★ MAHABUBABAD DISTRICT INCHARGE"
+  "★ NATIONAL CHAIRMAN, WORLD CONSUMER RIGHTS"
+  "★ TELANGANA STATEHOOD VETERAN"
+  "★ CHAMPION OF SOCIAL JUSTICE & BC RIGHTS"
+  "★ DOCTOR OF PHILOSOPHY (Ph.D.), KAKATIYA UNIVERSITY"
+
+3. Differentiate the Hero Section (`src/components/sections/Hero.tsx`):
+- Add a subtle floating pulse to the backlighting behind Dr. Srikanth Goud's cutout image (`/hero-bg.png`).
+- Add an interactive badge on the portrait: A floating glass pill on the bottom-right of the cutout that displays: "⚡ 25+ Years of Grassroots Groundwork" with an active emerald pulsing status dot.
+- Enhance the H1: Use an asymmetric styling where "Dr. Nalamasa" is a clean editorial white and "Srikanth Goud" shines in vibrant TRS Marigold Yellow with a subtle drop glow.
+- Add smooth transition hover states to the CTA buttons (scale 1.03 with gold glow).
+
+4. Modernize the Cards in "Vision", "Initiatives", and "Political Activities":
+- Convert standard static cards into modern interactive cards:
+  * When hovered, the card subtly lifts (`-translate-y-1.5`), the border illuminates with a TRS Yellow/Blue accent, and the icon container rotates 6 degrees.
+  * Add a subtle TRS tricolor accent line along the top edge of each card.
+  * Ensure buttons have smooth ripple/scale hover animations.
+
+5. Interactive Timeline Micro-Interactions (`src/components/sections/Timeline.tsx`):
+- Ensure that clicking category tabs triggers smooth layout re-rendering with zero visual jumping.
+- When hovering over milestone nodes, light up the corresponding year pill with a vibrant yellow background and bold slate text.
+
+Ensure the build compiles cleanly (`npm run build`) without errors.

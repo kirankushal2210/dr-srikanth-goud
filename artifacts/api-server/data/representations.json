@@ -1,0 +1,26 @@
+[
+  {
+    "id": "rep_1793993375540_wlyoo",
+    "referenceNumber": "DSG-REP-2026-519256",
+    "name": "K. Srinivas",
+    "mobile": "9848012345",
+    "email": "ksrinivas@example.com",
+    "constituency": "Mahabubabad",
+    "category": "Youth Employment",
+    "message": "Urgent representation regarding youth skill training center support in Mahabubabad town.",
+    "status": "RECEIVED",
+    "createdAt": "2026-11-06T19:29:35.540Z"
+  },
+  {
+    "id": "rep_1793988861580_5xqz3",
+    "referenceNumber": "DSG-REP-2026-746752",
+    "name": "Kavitha Rao",
+    "mobile": "9849012345",
+    "email": "kavitha@example.com",
+    "constituency": "Mahabubabad",
+    "category": "Public Grievance",
+    "message": "Requesting community health center facility upgrade in Kesamudram mandal.",
+    "status": "RECEIVED",
+    "createdAt": "2026-11-06T18:14:21.580Z"
+  }
+]

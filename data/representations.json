@@ -1,0 +1,14 @@
+[
+  {
+    "id": "rep_1793987498852_5d8m7",
+    "referenceNumber": "DSG-REP-2026-170823",
+    "name": "Ravi Kumar",
+    "mobile": "9876543210",
+    "email": "ravi@example.com",
+    "constituency": "Mahabubabad",
+    "category": "Public Grievance",
+    "message": "Requesting follow up on local road infrastructure near collectorate.",
+    "status": "RECEIVED",
+    "createdAt": "2026-11-06T17:51:38.852Z"
+  }
+]

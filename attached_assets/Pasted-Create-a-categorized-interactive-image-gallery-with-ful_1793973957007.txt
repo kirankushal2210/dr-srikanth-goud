@@ -1,0 +1,231 @@
+Create a categorized, interactive image gallery with full Lightbox modal support (`src/components/sections/MediaGallery.tsx`) using the photos from Dr. Nalamasa Srikanth Goud's biographical archive.
+
+Adhere strictly to the Telangana Rakshana Sena (TRS) theme:
+- Canvas Ground: Deep Forest Green (#062319 / #0A2E22)
+- Accents: Vibrant Party Yellow (#FACC15) and Azure Sky Blue (#38BDF8)
+- Borders: #144A38 with gold hover transitions
+
+---
+
+#### 1. Data File: `src/data/galleryData.ts`
+
+Create `src/data/galleryData.ts`:
+
+export interface GalleryItem {
+  id: string;
+  pdfPage: number;
+  category: 'all' | 'leadership' | 'agitations' | 'cadre' | 'welfare' | 'devotional';
+  titleEn: string;
+  titleTe: string;
+  location: string;
+  image: string;
+  descriptionEn: string;
+  descriptionTe: string;
+  tag: string;
+}
+
+export const galleryArchive: GalleryItem[] = [
+  {
+    id: 'phd-presentation',
+    pdfPage: 3,
+    category: 'leadership',
+    titleEn: 'Doctoral (Ph.D.) Thesis Presentation',
+    titleTe: 'కల్వకుంట్ల కవిత గారికి డాక్టరేట్ థీసిస్ సమర్పణ',
+    location: 'Hyderabad',
+    image: '/activities/page3_phd.jpg',
+    descriptionEn: 'Formally presenting his doctoral thesis earned from Kakatiya University in Tourism Management to Smt. Kalvakuntla Kavitha.',
+    descriptionTe: 'కాకతీయ విశ్వవిద్యాలయం నుండి పీహెచ్‌డీ పట్టా పొందిన అనంతరం పరిశోధనా గ్రంథాన్ని కవితక్కకు అందజేసిన దృశ్యం.',
+    tag: 'Academic Milestone'
+  },
+  {
+    id: 'parents-roots',
+    pdfPage: 16,
+    category: 'leadership',
+    titleEn: 'Family Roots & Parental Blessings',
+    titleTe: 'తల్లిదండ్రుల ఆశీర్వాదం - క్రమశిక్షణతో కూడిన పెంపకం',
+    location: 'Mahabubabad',
+    image: '/activities/page16_parents.jpg',
+    descriptionEn: 'With father Shri Nalamasa Yakaiah and mother Smt. Aruna, who instilled values of public service and loyalty to Telangana.',
+    descriptionTe: 'తండ్రి యాకయ్య, తల్లి అరుణ గార్లతో డాక్టర్ నలమాస శ్రీకాంత్ గౌడ్.',
+    tag: 'Personal Journey'
+  },
+  {
+    id: 'assembly-speaker-meet',
+    pdfPage: 17,
+    category: 'leadership',
+    titleEn: 'With Telangana Assembly 1st Speaker',
+    titleTe: 'తొలి శాసనసభాపతి సిరికొండ మధుసూదనాచారితో భేటీ',
+    location: 'Hyderabad',
+    image: '/activities/page17_speaker.jpg',
+    descriptionEn: 'Consulting with Telangana movement stalwart and first Assembly Speaker Sirikonda Madhusudhana Chary.',
+    descriptionTe: 'ఉద్యమ నాయకుడు, తొలి స్పీకర్ మధుసూదనాచారి గారిని మర్యాదపూర్వకంగా కలిసిన సందర్భం.',
+    tag: 'Statehood Veterans'
+  },
+  {
+    id: 'tgpsc-gunpark-protest',
+    pdfPage: 9,
+    category: 'agitations',
+    titleEn: 'TGPSC Group-1 Paper Leak Agitation',
+    titleTe: 'టీజీపీఎస్సీ గ్రూప్-1 అక్రమాలపై గన్ పార్క్ వద్ద ధర్నా',
+    location: 'Gun Park, Hyderabad',
+    image: '/activities/page9_tgpsc_protest.jpg',
+    descriptionEn: 'Leading massive demonstrations demanding transparent re-examination and exposure of corruption in government recruitments.',
+    descriptionTe: 'నిరుద్యోగుల హక్కులకై గన్ పార్క్ వద్ద భారీ ఆందోళన చేపట్టిన డాక్టర్ నలమాస శ్రీకాంత్ గౌడ్.',
+    tag: 'Youth Rights'
+  },
+  {
+    id: 'tgpsc-police-arrest',
+    pdfPage: 10,
+    category: 'agitations',
+    titleEn: 'Police Custody During Youth Agitation',
+    titleTe: 'నిరుద్యోగ పోరాటంలో పోలీసుల అరెస్ట్',
+    location: 'Nampally / Afzal Gunj PS',
+    image: '/activities/page10_police_arrest.jpg',
+    descriptionEn: 'Facing police barricades and detention across multiple police stations for championing youth recruitment integrity.',
+    descriptionTe: 'ప్రజాస్వామ్యబద్ధంగా ఆందోళన చేస్తున్న శ్రీకాంత్ గౌడ్ గారిని పోలీసులు నిర్బంధించిన దృశ్యం.',
+    tag: 'Frontline Battle'
+  },
+  {
+    id: 'hcu-obc-satyagraha',
+    pdfPage: 11,
+    category: 'agitations',
+    titleEn: 'HCU Satyagraha for OBC Reservation Rights',
+    titleTe: 'హైదరాబాద్ సెంట్రల్ యూనివర్సిటీలో ఓబీసీ సత్యాగ్రహ దీక్ష',
+    location: 'University of Hyderabad (HCU)',
+    image: '/activities/page11_hcu_obc.jpg',
+    descriptionEn: 'Addressing OBC scholars and non-teaching unions demanding strict adherence to constitutional reservation norms in central universities.',
+    descriptionTe: 'కేంద్ర విశ్వవిద్యాలయంలో ఓబీసీల రాజ్యాంగబద్ధ హక్కుల సాధనకై దీక్షకు సంపూర్ణ మద్దతు.',
+    tag: 'Social Justice'
+  },
+  {
+    id: 'mahabubabad-cadre-conclave',
+    pdfPage: 23,
+    category: 'cadre',
+    titleEn: 'Mahabubabad District Cadre Conclave',
+    titleTe: 'మానుకోట జిల్లా నాయకుల సన్నాహక సమావేశం',
+    location: 'Shadi Khana, Mahabubabad',
+    image: '/activities/page23_mahabubabad.jpg',
+    descriptionEn: 'Presiding over the large-scale district leaders meeting to mobilize party cadre across 18 mandals.',
+    descriptionTe: 'మహబూబాబాద్ జిల్లాలోని 18 మండలాల శ్రేణులతో జెండా పండుగ సన్నాహక సదస్సు.',
+    tag: 'Cadre Leadership'
+  },
+  {
+    id: 'praja-bhavan-welfare-rally',
+    pdfPage: 26,
+    category: 'agitations',
+    titleEn: 'Praja Bhavan Women Welfare Demonstration',
+    titleTe: 'ప్రజా భవన్ ఎదుట మహిళా గ్యారంటీ హామీల సాధన పోరు',
+    location: 'Praja Bhavan, Hyderabad',
+    image: '/activities/page26_praja_bhavan.jpg',
+    descriptionEn: 'Spearheading mass protest demanding the immediate disbursement of the promised ₹2,500 monthly assistance to women.',
+    descriptionTe: 'ఎన్నికల హామీ మహిళలకు నెలకు రూ.2500 చెల్లించాలని డిమాండ్ చేస్తూ నిరసన.',
+    tag: 'Public Welfare'
+  },
+  {
+    id: 'ailamma-family-joining',
+    pdfPage: 26,
+    category: 'cadre',
+    titleEn: 'Chakali Ailamma Descendants Induction',
+    titleTe: 'వీరనారి చాకలి ఐలమ్మ కుటుంబ సభ్యుల చేరిక',
+    location: 'State Central Office',
+    image: '/activities/page26_ailamma.jpg',
+    descriptionEn: 'Inducting Satla Padma and Jyothi, heirs of Telangana peasant struggle icon Chakali Ailamma, into party leadership.',
+    descriptionTe: 'తెలంగాణ సాయుధ పోరాట వీరనారి చాకలి ఐలమ్మ వారసులను పార్టీలోకి సాదరంగా ఆహ్వానించిన దృశ్యం.',
+    tag: 'Historic Legacy'
+  },
+  {
+    id: 'narsampet-youth-brigade',
+    pdfPage: 28,
+    category: 'cadre',
+    titleEn: 'Mass Youth Joining from Narsampet',
+    titleTe: 'నర్సంపేట నియోజకవర్గ యువజన నాయకుల చేరిక',
+    location: 'Hyderabad State Office',
+    image: '/activities/page28_narsampet.jpg',
+    descriptionEn: 'Coordinating the induction of hundreds of youth and student leaders from Narsampet assembly into the TRS organization.',
+    descriptionTe: 'నర్సంపేట ప్రాంతానికి చెందిన భారీ యువజన శ్రేణులను పార్టీలోకి చేర్పించిన సందర్భం.',
+    tag: 'Youth Power'
+  },
+  {
+    id: 'covid-ration-drive',
+    pdfPage: 52,
+    category: 'welfare',
+    titleEn: 'COVID-19 Migrant Food & Ration Relief',
+    titleTe: 'వలస కార్మికులకు బియ్యం, నిత్యావసరాల పంపిణీ',
+    location: 'Nellikuduru / Boduppal',
+    image: '/activities/page52_covid_relief.jpg',
+    descriptionEn: 'Supplying 60kg rice bags and essential groceries to interstate workers stranded during pandemic lockdowns through Lokahitha Association.',
+    descriptionTe: 'కరోనా కష్టకాలంలో ఇతర రాష్ట్రాల వలస కార్మికులకు నిత్యావసరాలు, బియ్యం పంపిణీ చేసిన శ్రీకాంత్ గౌడ్.',
+    tag: 'Corona Warrior'
+  },
+  {
+    id: 'esi-hospital-inspection',
+    pdfPage: 50,
+    category: 'welfare',
+    titleEn: 'ESI Nacharam Hospital Fact-Finding Visit',
+    titleTe: 'నాచారం ఈఎస్ఐ ఆసుపత్రి క్షేత్రస్థాయి పరిశీలన',
+    location: 'Nacharam, Hyderabad',
+    image: '/activities/page50_esi_hospital.jpg',
+    descriptionEn: 'Inspecting frontline challenges faced by sanitation and healthcare contract staff as member of the Outsourcing Study Committee.',
+    descriptionTe: 'ఔట్ సోర్సింగ్ ఉద్యోగుల సమస్యలను స్వయంగా తెలుసుకోవడానికి ఈఎస్ఐ ఆస్పత్రిని సందర్శించిన దృశ్యం.',
+    tag: 'Worker Advocacy'
+  },
+  {
+    id: 'medaram-jatara-visit',
+    pdfPage: 53,
+    category: 'devotional',
+    titleEn: 'Medaram Sammakka Sarakka Maha Jatara',
+    titleTe: 'మేడారం సమ్మక్క సారక్క మహా జాతర దర్శనం',
+    location: 'Medaram, Mulugu',
+    image: '/activities/page53_medaram.jpg',
+    descriptionEn: 'Seeking tribal deities blessings at the world-renowned Medaram Maha Jatara alongside Telangana Rakshana Sena leadership.',
+    descriptionTe: 'ఆసియాలోనే అతిపెద్ద గిరిజన జాతర మేడారంలో ప్రత్యేక పూజలు నిర్వహించిన దృశ్యం.',
+    tag: 'Cultural Heritage'
+  },
+  {
+    id: 'yadadri-darshan',
+    pdfPage: 53,
+    category: 'devotional',
+    titleEn: 'Yadadri Sri Lakshmi Narasimha Swamy Darshan',
+    titleTe: 'యాదాద్రి శ్రీ లక్ష్మీ నరసింహ స్వామి వారి దర్శనం',
+    location: 'Yadagirigutta',
+    image: '/activities/page53_yadadri.jpg',
+    descriptionEn: 'Pilgrimage to Yadadri shrine seeking divine blessings prior to launching the statewide "Janam Bata" mass outreach tour.',
+    descriptionTe: 'జనం బాట ప్రజా యాత్ర ప్రారంభానికి ముందు యాదాద్రి క్షేత్రంలో పూజలు.',
+    tag: 'Spiritual Tour'
+  }
+];
+
+---
+
+#### 2. Component Implementation: `src/components/sections/MediaGallery.tsx`
+
+Build this component with:
+1. Section Header:
+   - Eyebrow: `📸 ARCHIVAL PHOTOGRAPHS • THE LEADERSHIP RECORD` in TRS Yellow.
+   - H2 Headline: "Photographic Archive & Public Life"
+   - Telugu Subtitle: "ప్రజా జీవితంలో మైలురాళ్ళు — అరుదైన చిత్రమాలిక"
+2. Filter Tabs:
+   - Buttons:
+     * All Moments (`all`)
+     * Leadership & Dignitaries (`leadership`)
+     * Frontline Agitations (`agitations`)
+     * Cadre & Assembly Meets (`cadre`)
+     * Social Welfare & COVID Relief (`welfare`)
+     * Devotional & Cultural (`devotional`)
+   - Styled with active TRS Yellow fills (`bg-trs-yellow text-slate-950 font-bold`) and inactive dark green buttons (`bg-trs-green-surface text-slate-300 border border-trs-green-border`).
+3. Responsive Grid (3 Columns on Desktop, 2 on Tablet, 1 on Mobile):
+   - Card displays:
+     * Photo container with hover zoom (`group-hover:scale-105 transition-transform duration-300`).
+     * Fallback placeholder styling if image fails to load.
+     * Top-left pill: Page reference badge (`PDF P. 09`, `PDF P. 23`, etc.).
+     * Top-right pill: Category Tag (`Youth Rights`, `Cadre Leadership`, etc.) in TRS Azure Blue.
+     * Bottom overlay text: English Title, Telugu Translation, and Location with MapPin icon.
+     * Click card action: Opens Lightbox.
+4. Lightbox Modal:
+   - Fullscreen backdrop blur (`backdrop-blur-md bg-black/85`).
+   - Image rendered high-resolution in center.
+   - Information card beneath/beside:
+     * Title (EN + TE).
+     * Location.
+     * Full paragraph narrative description (EN + TE).
+     * Close button (`X` icon and `Escape` key trigger).

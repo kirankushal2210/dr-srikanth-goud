@@ -1,0 +1,28 @@
+kind = "web"
+previewPath = "/"
+title = "Dr. Nalamasa Srikanth Goud"
+description = "A responsive public-service portfolio for Dr. Nalamasa Srikanth Goud, presenting his background, vision, public journey, initiatives, media and office information."
+version = "1.0.0"
+id = "artifacts/srikanth-goud"
+router = "path"
+
+[[services]]
+name = "web"
+paths = [ "/" ]
+localPort = 25920
+
+[services.development]
+run = "pnpm --filter @workspace/srikanth-goud run dev"
+
+[services.production]
+build = [ "pnpm", "--filter", "@workspace/srikanth-goud", "run", "build" ]
+serve = "static"
+publicDir = "artifacts/srikanth-goud/dist/public"
+
+[[services.production.rewrites]]
+from = "/*"
+to = "/index.html"
+
+[services.env]
+PORT = "25920"
+BASE_PATH = "/"

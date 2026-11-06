@@ -1,0 +1,248 @@
+Update the Citizen Connect Form component (`src/components/sections/ContactFooter.tsx` or `ContactForm.tsx`) so that the form is fully functional without a backend server, using client-side email generation matching the reference notice.
+
+Target Office Email: srikanthk.vtelangana@gmail.com
+
+---
+
+### Implementation Code (`src/components/sections/ContactForm.tsx`)
+
+Replace the form section with the following component:
+
+```tsx
+import React, { useState } from 'react';
+import { Info, Send, Mail, Copy, Check, ExternalLink } from 'lucide-react';
+
+interface FormData {
+  fullName: string;
+  phone: string;
+  constituency: string;
+  category: string;
+  message: string;
+}
+
+export const ContactForm: React.FC = () => {
+  const [formData, setFormData] = useState<FormData>({
+    fullName: '',
+    phone: '',
+    constituency: 'Mahabubabad',
+    category: 'Public Grievance',
+    message: '',
+  });
+
+  const [copied, setCopied] = useState(false);
+  const [submitted, setSubmitted] = useState(false);
+
+  const officeEmail = 'srikanthk.vtelangana@gmail.com';
+
+  const formatEmailContent = () => {
+    const subject = encodeURIComponent(
+      `[Citizen Representation] - ${formData.category} - ${formData.fullName} (${formData.constituency})`
+    );
+
+    const bodyText = 
+`Respected Dr. Nalamasa Srikanth Goud Garu,
+Office of the State Spokesperson & Mahabubabad Incharge,
+
+I am submitting the following representation/grievance:
+
+--------------------------------------------------
+CITIZEN DETAILS
+--------------------------------------------------
+Name: ${formData.fullName}
+Phone: ${formData.phone}
+Constituency / Area: ${formData.constituency}
+Category: ${formData.category}
+
+--------------------------------------------------
+MESSAGE / REPRESENTATION DETAILS
+--------------------------------------------------
+${formData.message}
+
+--------------------------------------------------
+Sent via Citizen Connect Portal (TLPC-6428)
+`;
+
+    const encodedBody = encodeURIComponent(bodyText);
+    return { subject, encodedBody, plainBody: bodyText };
+  };
+
+  const handleDefaultMailto = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!formData.fullName || !formData.phone || !formData.message) {
+      alert('Please fill in your name, contact phone, and message.');
+      return;
+    }
+
+    const { subject, encodedBody } = formatEmailContent();
+    const mailtoUrl = `mailto:${officeEmail}?subject=${subject}&body=${encodedBody}`;
+    
+    // Trigger user's default email app
+    window.location.href = mailtoUrl;
+    setSubmitted(true);
+  };
+
+  const handleOpenGmail = () => {
+    const { subject, encodedBody } = formatEmailContent();
+    const gmailUrl = `[https://mail.google.com/mail/?view=cm&fs=1&to=$](https://mail.google.com/mail/?view=cm&fs=1&to=$){officeEmail}&su=${subject}&body=${encodedBody}`;
+    window.open(gmailUrl, '_blank', 'noopener,noreferrer');
+  };
+
+  const handleCopyClipboard = () => {
+    const { plainBody } = formatEmailContent();
+    navigator.clipboard.writeText(
+      `To: ${officeEmail}\nSubject: [Citizen Representation] - ${formData.category} - ${formData.fullName}\n\n${plainBody}`
+    );
+    setCopied(true);
+    setTimeout(() => setCopied(false), 3000);
+  };
+
+  return (
+    <div className="bg-[#0A2E22] border border-[#144A38] rounded-xl p-6 sm:p-8 text-white shadow-xl">
+      {/* 1. Exactly Matching "How this works" Notice Box */}
+      <div className="flex items-start gap-3 bg-[#FDF8E2]/10 border border-[#FACC15]/40 text-[#FEF08A] rounded-lg p-4 mb-6 text-xs sm:text-sm leading-relaxed">
+        <Info className="w-5 h-5 text-[#FACC15] shrink-0 mt-0.5"/>
+        <div>
+          <span className="font-bold text-[#FACC15]">How this works: </span>
+          this form prepares an email draft addressed to the office. It does not
+          send, deliver or store anything automatically. You will send the draft
+          yourself from your own email app.
+        </div>
+      </div>
+
+      <form onSubmit={handleDefaultMailto} className="space-y-4">
+        {/* Full Name & Phone */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div>
+            <label className="block text-xs font-semibold uppercase tracking-wider text-slate-300 mb-1.5">
+              Full Name *
+            </label>
+            <input
+              type="text"
+              required
+              placeholder="e.g. Ramesh Goud"
+              value={formData.fullName}
+              onChange={(e) => setFormData({ ...formData, fullName: e.target.value })}
+              className="w-full px-3.5 py-2.5 rounded-lg bg-[#062319] border border-[#144A38] text-white text-sm focus:outline-none focus:border-[#FACC15] focus:ring-1 focus:ring-[#FACC15] transition"
+            />
+          </div>
+
+          <div>
+            <label className="block text-xs font-semibold uppercase tracking-wider text-slate-300 mb-1.5">
+              Phone Number *
+            </label>
+            <input
+              type="tel"
+              required
+              placeholder="+91 98765 43210"
+              value={formData.phone}
+              onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
+              className="w-full px-3.5 py-2.5 rounded-lg bg-[#062319] border border-[#144A38] text-white text-sm focus:outline-none focus:border-[#FACC15] focus:ring-1 focus:ring-[#FACC15] transition"
+            />
+          </div>
+        </div>
+
+        {/* Constituency & Subject Category */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div>
+            <label className="block text-xs font-semibold uppercase tracking-wider text-slate-300 mb-1.5">
+              Constituency / Area
+            </label>
+            <select
+              value={formData.constituency}
+              onChange={(e) => setFormData({ ...formData, constituency: e.target.value })}
+              className="w-full px-3.5 py-2.5 rounded-lg bg-[#062319] border border-[#144A38] text-white text-sm focus:outline-none focus:border-[#FACC15] transition"
+            >
+              <option value="Mahabubabad">Mahabubabad</option>
+              <option value="Balkonda">Balkonda</option>
+              <option value="Armur">Armur</option>
+              <option value="Warangal">Warangal</option>
+              <option value="Nizamabad">Nizamabad</option>
+              <option value="Other">Other / State Level</option>
+            </select>
+          </div>
+
+          <div>
+            <label className="block text-xs font-semibold uppercase tracking-wider text-slate-300 mb-1.5">
+              Purpose / Category
+            </label>
+            <select
+              value={formData.category}
+              onChange={(e) => setFormData({ ...formData, category: e.target.value })}
+              className="w-full px-3.5 py-2.5 rounded-lg bg-[#062319] border border-[#144A38] text-white text-sm focus:outline-none focus:border-[#FACC15] transition"
+            >
+              <option value="Public Grievance">Public Grievance</option>
+              <option value="Student & Youth Affairs">Student & Youth Affairs</option>
+              <option value="OBC Rights & Representation">OBC Rights & Representation</option>
+              <option value="Consumer Rights Redressal">Consumer Rights Redressal</option>
+              <option value="Event Invitation">Event Invitation / Meeting Request</option>
+            </select>
+          </div>
+        </div>
+
+        {/* Message / Representation */}
+        <div>
+          <label className="block text-xs font-semibold uppercase tracking-wider text-slate-300 mb-1.5">
+            Grievance / Representation Details *
+          </label>
+          <textarea
+            required
+            rows={4}
+            placeholder="Write the details of your representation, problem or request..."
+            value={formData.message}
+            onChange={(e) => setFormData({ ...formData, message: e.target.value })}
+            className="w-full px-3.5 py-2.5 rounded-lg bg-[#062319] border border-[#144A38] text-white text-sm focus:outline-none focus:border-[#FACC15] focus:ring-1 focus:ring-[#FACC15] transition"
+          />
+        </div>
+
+        {/* Primary Action Button */}
+        <button
+          type="submit"
+          className="w-full flex items-center justify-center gap-2 py-3 px-6 rounded-lg bg-[#FACC15] hover:bg-[#FDE047] text-slate-950 font-bold text-sm tracking-wide transition-all duration-200 shadow-lg shadow-yellow-500/10 cursor-pointer"
+        >
+          <Send className="w-4 h-4 text-slate-950"/>
+          <span>Prepare Email Draft</span>
+        </button>
+      </form>
+
+      {/* Fallback Drawer (Shown when user clicks prepare or wants direct options) */}
+      <div className="mt-6 pt-5 border-t border-[#144A38]/70">
+        <div className="text-xs text-slate-400 mb-3 font-medium">
+          Choose where to open your draft:
+        </div>
+
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+          <button
+            type="button"
+            onClick={handleOpenGmail}
+            className="flex items-center justify-center gap-2 px-3 py-2 rounded-lg bg-[#062319] hover:bg-[#083022] border border-[#144A38] text-xs text-slate-200 transition"
+          >
+            <ExternalLink className="w-3.5 h-3.5 text-[#38BDF8]"/>
+            <span>Open in Gmail (Web)</span>
+          </button>
+
+          <button
+            type="button"
+            onClick={handleCopyClipboard}
+            className="flex items-center justify-center gap-2 px-3 py-2 rounded-lg bg-[#062319] hover:bg-[#083022] border border-[#144A38] text-xs text-slate-200 transition"
+          >
+            {copied ? (
+              <>
+                <Check className="w-3.5 h-3.5 text-emerald-400"/>
+                <span className="text-emerald-400">Copied to Clipboard!</span>
+              </>
+            ) : (
+              <>
+                <Copy className="w-3.5 h-3.5 text-[#FACC15]"/>
+                <span>Copy Draft Text</span>
+              </>
+            )}
+          </button>
+        </div>
+
+        <div className="text-[11px] text-slate-400/80 text-center mt-3">
+          Direct Office Email: <span className="text-[#38BDF8] select-all font-mono">srikanthk.vtelangana@gmail.com</span>
+        </div>
+      </div>
+    </div>
+  );
+};

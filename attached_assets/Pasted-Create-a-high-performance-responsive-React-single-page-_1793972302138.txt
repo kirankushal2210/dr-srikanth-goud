@@ -1,0 +1,33 @@
+Create a high-performance, responsive React single-page portfolio website using Vite, Tailwind CSS, Lucide React icons, and Framer Motion for Dr. Nalamasa Srikanth Goud, modeled closely after the editorial statesman layout of https://thanneeruharishrao.org/.
+
+1. Styling & Setup:
+- Font pairing: Heading serif ('Playfair Display' or 'Cinzel' via Google Fonts) and clean body sans ('Plus Jakarta Sans').
+- Color tokens:
+  * Primary: Deep Navy/Slate (`#0F172A`)
+  * Brand Accent: Royal Amber/Telangana Gold (`#D97706` / `#B45309`) and Telangana Rose (`#E11D48`)
+  * Backgrounds: Pristine editorial off-white (`#F8FAFC` and `#FFFFFF`) with subtle border lines (`#E2E8F0`).
+
+2. Sticky Top Navigation:
+- Brand Logo / Monogram: "DSG" badge with full label "Dr. Nalamasa Srikanth Goud" and subtitle "Official Spokesperson & Mahabubabad Incharge".
+- Nav Links with smooth scroll anchors: #about, #vision, #journey, #initiatives, #media, #contact.
+- Right CTA: "Reach Office" primary button linking to #contact, and a Telugu language badge toggle placeholder.
+- Full mobile hamburger slide-out drawer with icons.
+
+3. Hero Section (Mirroring Harish Rao's high-impact layout):
+- Left Column:
+  * Over-title pill badge: "SERVING TELANGANA SINCE 2001 • GRASSROOTS REVOLUTIONARY"
+  * Primary Headline: "Dr. Nalamasa Srikanth Goud"
+  * Subtitle: "Grassroots Leader, Consumer Rights Crusader & Voice of Telangana's Youth — Official Spokesperson & Mahabubabad District Incharge, Telangana Rakshana Sena (TRS)."
+  * Bio Snippet Card: "Born in Mahabubabad | Doctorate (Ph.D.) Kakatiya University | Frontline Defender of Social Justice & Cadre Strength."
+  * Action Buttons: "Explore Journey (#journey)", "View Press & Gallery (#media)", and "Contact Office (#contact)".
+  * Floating Stat-Pill Counter Grid (Clean 4-column cards with subtle gold accents):
+    - [25+] "Years in Public Life (Since 2001)"
+    - [Ph.D.] "Doctorate from Kakatiya University"
+    - [100+] "Rallies, Agitations & Field Campaigns"
+    - [National] "Chairman, World Consumer Rights"
+- Right Column:
+  * Elegant framed portrait container with subtle gold double-border and drop shadow. Use a high-quality placeholder image representing Dr. Srikanth Goud in traditional white kurta with Telangana scarf.
+  * Floating verified badge: "✓ TRS Mahabubabad District Incharge".
+  * Bottom badge: "National Chairman — World Consumer Rights (2020)".
+
+Ensure complete responsiveness, clean TypeScript/JSX components, and accessible ARIA attributes.
