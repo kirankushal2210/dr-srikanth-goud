@@ -1,12 +1,11 @@
 import MarqueeTicker from "@/components/ui/MarqueeTicker";
-import { ArrowUp, ArrowUpRight, FileBadge, Mail, MapPin, Phone } from "lucide-react";
+import { ArrowUp, ArrowUpRight, FileBadge, MapPin, Phone } from "lucide-react";
 import { FaFacebookF, FaInstagram, FaXTwitter, FaYoutube } from "react-icons/fa6";
 import { leaderProfile } from "@/data/leaderProfile";
 import RepresentationForm from "./contact/RepresentationForm";
 
 const ADDRESS = "Plat No-4NP, PRE, Es Colony, STNO-1, Opp SSPA Academy, Boduppal, Chengicherla Road, Telangana – 500092";
 const PHONE = leaderProfile.contact.phone; // "+91 8886666006"
-const EMAIL = leaderProfile.contact.email;
 const REG = leaderProfile.contact.regNo;
 const BIO = leaderProfile.contact.digitalBioUrl;
 const SOCIAL = [
@@ -34,7 +33,7 @@ export function ContactSection() {
         <div className="max-w-2xl">
           <p className="text-xs font-bold uppercase tracking-[0.28em] text-[#B45309]">Contact</p>
           <h2 id="contact-title" className="mt-5 font-display text-4xl font-semibold leading-[1.08] md:text-[3.4rem]">Reach the <span className="text-[#0284C7]">office</span></h2>
-          <p className="mt-5 font-medium text-stone-700">Official channels of the office, listed in full. Use them directly, or prepare a written representation below and send it from your own email.</p>
+          <p className="mt-5 font-medium text-stone-700">Official channels of the office, listed in full. Reach out by phone, visit the office in Boduppal, or register a citizen representation below.</p>
         </div>
 
         <div className="mt-14 grid gap-8 lg:grid-cols-[minmax(0,5fr)_minmax(0,7fr)] lg:gap-10">
@@ -54,10 +53,6 @@ export function ContactSection() {
               <li><a href={`tel:${PHONE.replace(/\s/g, "")}`} className={row} data-testid="link-phone">
                 <Phone className="mt-0.5 h-5 w-5 shrink-0 text-[#A16207]" aria-hidden />
                 <span className="min-w-0"><span className="block text-xs font-semibold uppercase tracking-[0.16em] text-[#4A5B52]">Phone</span><span className="mt-1 block text-[15px]">{PHONE}</span></span>
-              </a></li>
-              <li><a href={`mailto:${EMAIL}`} className={row} data-testid="link-email">
-                <Mail className="mt-0.5 h-5 w-5 shrink-0 text-[#A16207]" aria-hidden />
-                <span className="min-w-0"><span className="block text-xs font-semibold uppercase tracking-[0.16em] text-[#4A5B52]">Email</span><span className="mt-1 block break-all text-[15px]">{EMAIL}</span></span>
               </a></li>
               <li className="flex items-start gap-4 p-3 -mx-3" data-testid="text-bio-reg">
                 <FileBadge className="mt-0.5 h-5 w-5 shrink-0 text-[#A16207]" aria-hidden />
@@ -79,7 +74,7 @@ export function ContactSection() {
               </ul>
             </div>
           </article>
-          <div className="min-w-0"><RepresentationForm to={EMAIL} /></div>
+          <div className="min-w-0"><RepresentationForm /></div>
         </div>
       </div>
     </section>
@@ -97,22 +92,35 @@ export function SiteFooter() {
               <Monogram />
               <span className="font-display text-xl font-semibold text-[#15241D]">{leaderProfile.name}</span>
             </a>
-            <p className="mt-8 max-w-lg font-display text-2xl italic leading-snug text-[#A16207] sm:text-[1.7rem]">Dedicated to Telangana’s Self-Respect, Prosperity, and Social Justice</p>
-          </div>
-          <nav aria-label="Footer">
-            <p className="text-[11px] font-bold uppercase tracking-[0.26em] text-[#A16207]">Quick links</p>
-            <ul className="mt-5 grid grid-cols-2 gap-x-6 gap-y-3 text-[15px]">
-              {LINKS.map(([id, label]) => (
-                <li key={id}><a href={`#${id}`} data-testid={`link-footer-${id}`} className="rounded text-[#4A5B52] underline-offset-4 hover:text-[#A16207] hover:underline">{label}</a></li>
+            <p className="mt-8 max-w-lg font-display text-2xl italic leading-snug text-[#A16207] sm:text-[1.75rem]">Dedicated to Telangana’s Self-Respect, Prosperity, and Social Justice</p>
+            <div className="mt-6 flex flex-wrap gap-2">
+              {leaderProfile.titles.map((title) => (
+                <span key={title} className="rounded-full bg-[#14532D]/10 px-3 py-1 text-xs font-semibold text-[#14532D]">
+                  {title}
+                </span>
               ))}
-            </ul>
-          </nav>
-        </div>
-        <div className="mt-14 flex flex-col gap-4 border-t border-[#DFD8CB] pt-6 text-[13px] text-[#4A5B52] md:flex-row md:items-center md:justify-between">
-          <p data-testid="text-copyright">© 2026 Office of Dr. Nalamasa Srikanth Goud. All Rights Reserved. Bio-Data Reg: TLPC-6428.</p>
-          <a href="#top" data-testid="link-back-top" className="inline-flex items-center gap-2 self-start rounded font-semibold text-[#A16207] hover:underline md:self-auto">
-            Back to top <ArrowUp className="h-4 w-4" aria-hidden />
-          </a>
+            </div>
+          </div>
+          <div className="flex flex-col justify-between">
+            <div>
+              <p className="text-xs font-bold uppercase tracking-[0.24em] text-[#A16207]">Quick navigation</p>
+              <ul className="mt-4 flex flex-wrap gap-x-6 gap-y-2.5 text-sm font-semibold text-[#15241D]">
+                {LINKS.map(([id, label]) => (
+                  <li key={id}>
+                    <a href={`#${id}`} className="transition hover:text-[#0284C7]">
+                      {label}
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            </div>
+            <div className="mt-10 flex items-center justify-between border-t border-[#DFD8CB] pt-6 text-xs text-[#5f6f65]">
+              <p>&copy; {new Date().getFullYear()} Office of Dr. Nalamasa Srikanth Goud. All rights reserved.</p>
+              <a href="#top" className="inline-flex items-center gap-1 font-semibold text-[#14532D] hover:underline">
+                Top <ArrowUp className="h-3.5 w-3.5" />
+              </a>
+            </div>
+          </div>
         </div>
       </div>
     </footer>
@@ -120,5 +128,11 @@ export function SiteFooter() {
 }
 
 export default function ContactFooter() {
-  return (<><ContactSection /><MarqueeTicker id="footer" reverse /><SiteFooter /></>);
+  return (
+    <>
+      <ContactSection />
+      <MarqueeTicker id="footer" reverse />
+      <SiteFooter />
+    </>
+  );
 }

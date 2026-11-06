@@ -1,12 +1,10 @@
 {
   "$schema": "https://openapi.vercel.sh/vercel.json",
-  "buildCommand": "pnpm run build",
+  "framework": "vite",
+  "buildCommand": "pnpm --filter @workspace/srikanth-goud run build",
   "outputDirectory": "artifacts/srikanth-goud/dist/public",
+  "cleanUrls": true,
   "rewrites": [
-    {
-      "source": "/api/(.*)",
-      "destination": "/api/index.js"
-    },
     {
       "source": "/(.*)",
       "destination": "/index.html"

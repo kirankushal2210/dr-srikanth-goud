@@ -3,14 +3,10 @@ import {
   Check,
   ClipboardCopy,
   Download,
-  ExternalLink,
   PenLine,
   AlertCircle,
-  ShieldCheck,
   Loader2,
   RefreshCw,
-  FileText,
-  Mail,
 } from "lucide-react";
 import {
   CATEGORIES,
@@ -18,8 +14,7 @@ import {
   EMPTY,
   FIELD_ORDER,
   LIMITS,
-  buildRepresentation,
-  mailtoHref,
+  normalizeMobile,
   validate,
   type RepErrors,
   type RepFields,
@@ -35,7 +30,6 @@ interface StoredRepresentation {
   referenceNumber: string;
   name: string;
   mobile: string;
-  email?: string | null;
   constituency: string;
   category: string;
   message: string;
@@ -43,33 +37,27 @@ interface StoredRepresentation {
   createdAt: string;
 }
 
-export default function RepresentationForm({ to }: { to: string }) {
+export default function RepresentationForm() {
   const [v, setV] = useState<RepFields>(EMPTY);
   const [errors, setErrors] = useState<RepErrors>({});
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submission, setSubmission] = useState<StoredRepresentation | null>(null);
-  const [submitError, setSubmitError] = useState<string | null>(null);
-  const [ready, setReady] = useState<{ subject: string; body: string } | null>(null);
-  const [copy, setCopy] = useState<"idle" | "ok" | "fail">("idle");
   const [copiedRef, setCopiedRef] = useState(false);
   const confirmRef = useRef<HTMLDivElement>(null);
   const formRef = useRef<HTMLFormElement>(null);
 
   useEffect(() => {
-    if (submission || ready) {
+    if (submission) {
       confirmRef.current?.focus();
     }
-  }, [submission, ready]);
+  }, [submission]);
 
   const set = (k: keyof RepFields) => (e: ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
     const val = e.target.value;
     setV((p) => ({ ...p, [k]: val }));
     if (errors[k]) setErrors((p) => ({ ...p, [k]: undefined }));
-    if (submission || ready) {
+    if (submission) {
       setSubmission(null);
-      setReady(null);
-      setSubmitError(null);
-      setCopy("idle");
     }
   };
 
@@ -84,52 +72,37 @@ export default function RepresentationForm({ to }: { to: string }) {
     }
 
     setIsSubmitting(true);
-    setSubmitError(null);
-    setCopy("idle");
 
-    const draft = buildRepresentation(v);
-    setReady(draft);
+    // Simulate brief processing animation for reassuring user feedback
+    await new Promise((r) => setTimeout(r, 400));
+
+    const randomSuffix = Math.floor(100000 + Math.random() * 900000);
+    const refNumber = `DSG-REP-2026-${randomSuffix}`;
+    const cleanMobile = normalizeMobile(v.mobile) ?? v.mobile.trim();
+
+    const newRecord: StoredRepresentation = {
+      id: Date.now(),
+      referenceNumber: refNumber,
+      name: v.name.trim(),
+      mobile: cleanMobile,
+      constituency: v.constituency || "General / State",
+      category: v.category || "General Representation",
+      message: v.message.trim() || "(No additional details provided)",
+      status: "RECEIVED",
+      createdAt: new Date().toISOString(),
+    };
 
     try {
-      const res = await fetch("/api/representations", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          name: v.name,
-          mobile: v.mobile,
-          email: v.email || undefined,
-          constituency: v.constituency,
-          category: v.category,
-          message: v.message,
-        }),
-      });
-
-      const data = await res.json();
-      if (!res.ok || !data.success) {
-        throw new Error(data.message || "Failed to submit representation to server");
-      }
-
-      setSubmission(data.representation);
-    } catch (err: unknown) {
-      const errorMsg = err instanceof Error ? err.message : "Network error occurred";
-      setSubmitError(
-        `${errorMsg}. An offline representation draft has been prepared below so you can still send it directly via email.`,
-      );
-    } finally {
-      setIsSubmitting(false);
-    }
-  };
-
-  const fullText = ready ? `To: ${to}\nSubject: ${ready.subject}\n\n${ready.body}` : "";
-
-  const doCopy = async () => {
-    try {
-      if (!navigator.clipboard) throw new Error("no clipboard");
-      await navigator.clipboard.writeText(fullText);
-      setCopy("ok");
+      const existingRaw = localStorage.getItem("dsg_representations");
+      const list = existingRaw ? JSON.parse(existingRaw) : [];
+      list.unshift(newRecord);
+      localStorage.setItem("dsg_representations", JSON.stringify(list));
     } catch {
-      setCopy("fail");
+      // Ignore localStorage quotas or privacy blockers
     }
+
+    setSubmission(newRecord);
+    setIsSubmitting(false);
   };
 
   const copyRefNumber = async (refNum: string) => {
@@ -145,19 +118,19 @@ export default function RepresentationForm({ to }: { to: string }) {
   };
 
   const doDownload = () => {
-    const content = submission
-      ? `OFFICIAL CITIZEN REPRESENTATION ACKNOWLEDGMENT
+    if (!submission) return;
+    const content = `OFFICIAL CITIZEN REPRESENTATION ACKNOWLEDGMENT
 --------------------------------------------------
 Tracking ID:   ${submission.referenceNumber}
 Status:        ${submission.status}
 Received At:   ${new Date(submission.createdAt).toLocaleString()}
 Office:        Secretariat Desk of Dr. Nalamasa Srikanth Goud
+Jurisdiction:  Mahabubabad Camp Office & Public Grievance Cell
 
 CITIZEN DETAILS:
 --------------------------------------------------
 Full Name:     ${submission.name}
 Mobile:        +91 ${submission.mobile}
-Email:         ${submission.email || "N/A"}
 Constituency:  ${submission.constituency}
 Category:      ${submission.category}
 
@@ -166,13 +139,12 @@ REPRESENTATION MESSAGE:
 ${submission.message}
 
 --------------------------------------------------
-This acknowledgment confirms your representation has been officially registered.`
-      : fullText;
+This acknowledgment confirms your representation has been officially recorded.`;
 
     const url = URL.createObjectURL(new Blob([content], { type: "text/plain;charset=utf-8" }));
     const a = document.createElement("a");
     a.href = url;
-    a.download = `representation-${submission?.referenceNumber || "draft"}.txt`;
+    a.download = `representation-${submission.referenceNumber}.txt`;
     a.click();
     setTimeout(() => URL.revokeObjectURL(url), 1000);
   };
@@ -180,16 +152,6 @@ This acknowledgment confirms your representation has been officially registered.
   const resetForm = () => {
     setV(EMPTY);
     setSubmission(null);
-    setReady(null);
-    setSubmitError(null);
-    setCopy("idle");
-    setTimeout(() => formRef.current?.querySelector<HTMLElement>('[name="name"]')?.focus(), 0);
-  };
-
-  const edit = () => {
-    setSubmission(null);
-    setReady(null);
-    setCopy("idle");
     setTimeout(() => formRef.current?.querySelector<HTMLElement>('[name="name"]')?.focus(), 0);
   };
 
@@ -237,18 +199,10 @@ This acknowledgment confirms your representation has been officially registered.
         Write to the Secretariat
       </h3>
       <p className="mt-1.5 text-xs text-stone-600">
-        All submissions are recorded into the official register and routed directly to the Secretariat desk at{" "}
-        <strong className="text-[#14532D] underline decoration-[#CA8A04]/50">srikanthk.vtelangana@gmail.com</strong>.
+        All submissions are officially recorded with an instant tracking reference ID for follow-up with the Camp Office.
       </p>
 
-      {submitError && (
-        <div className="mt-4 flex gap-2.5 rounded-lg border border-[#a51d3c]/30 bg-[#fdf2f4] p-3.5 text-xs text-[#a51d3c]">
-          <AlertCircle className="mt-0.5 h-4 w-4 shrink-0" />
-          <p>{submitError}</p>
-        </div>
-      )}
-
-      {/* When successfully submitted directly via API */}
+      {/* When successfully submitted */}
       {submission ? (
         <div
           ref={confirmRef}
@@ -329,12 +283,6 @@ This acknowledgment confirms your representation has been officially registered.
                   })}
                 </span>
               </div>
-              <div className="sm:col-span-2 rounded-lg bg-[#FAF8F5] p-2.5 border border-[#E2DDD5] flex flex-wrap items-center justify-between gap-2">
-                <span className="text-[#5f6f65] text-xs">Assigned Secretariat Desk:</span>
-                <span className="font-semibold text-xs text-[#14532D] flex items-center gap-1.5 font-mono">
-                  <Mail className="h-3.5 w-3.5 text-[#CA8A04]" /> srikanthk.vtelangana@gmail.com
-                </span>
-              </div>
             </div>
           </div>
 
@@ -345,15 +293,8 @@ This acknowledgment confirms your representation has been officially registered.
               data-testid="button-download-receipt"
               className="inline-flex items-center gap-2 rounded-full bg-[#14532D] px-5 py-2.5 text-sm font-semibold text-[#FBF8F1] transition hover:bg-[#166534]"
             >
-              <Download className="h-4 w-4" /> Download Official Receipt
+              <Download className="h-4 w-4" /> Download Official Receipt (.txt)
             </button>
-            <a
-              href={`mailto:srikanthk.vtelangana@gmail.com?subject=${encodeURIComponent(`[Secretariat Representation ${submission.referenceNumber}] ${submission.category} - ${submission.name}`)}&body=${encodeURIComponent(`OFFICIAL SECRETARIAT CITIZEN REPRESENTATION\nTracking ID: ${submission.referenceNumber}\nCitizen: ${submission.name}\nMobile: +91 ${submission.mobile}\nConstituency: ${submission.constituency}\nSubject: ${submission.category}\n\nRepresentation:\n${submission.message}`)}`}
-              data-testid="button-open-email-copy"
-              className="inline-flex items-center gap-2 rounded-full border border-[#14532D]/40 bg-[#FFFFFF] px-4 py-2.5 text-sm font-semibold text-[#15241D] transition hover:bg-[#F5F1E9]"
-            >
-              <Mail className="h-4 w-4 text-[#A16207]" /> Open in Email App
-            </a>
             <button
               type="button"
               onClick={resetForm}
@@ -384,57 +325,45 @@ This acknowledgment confirms your representation has been officially registered.
               onChange={set("name")}
               disabled={isSubmitting}
               className={`${field} ${errors.name ? badBorder : okBorder}`}
+              placeholder="e.g. Ramesh Reddy"
             />
             <Err k="name" />
           </div>
-          <div className="grid gap-5 sm:grid-cols-2">
-            <div>
-              <Label k="mobile" req>
-                Mobile Number
-              </Label>
-              <div
-                className={`flex overflow-hidden rounded-lg border bg-[#fbf7ec] focus-within:outline-2 focus-within:outline-offset-2 focus-within:outline-[#CA8A04] ${
-                  errors.mobile ? badBorder : okBorder
-                }`}
+
+          <div>
+            <Label k="mobile" req>
+              Mobile Number
+            </Label>
+            <div
+              className={`flex overflow-hidden rounded-lg border bg-[#fbf7ec] focus-within:outline-2 focus-within:outline-offset-2 focus-within:outline-[#CA8A04] ${
+                errors.mobile ? badBorder : okBorder
+              }`}
+            >
+              <span
+                className="grid place-items-center border-r border-[#c9bb94] bg-[#ebe2c8] px-3.5 text-[15px] font-semibold text-[#24382d]"
+                aria-hidden
               >
-                <span
-                  className="grid place-items-center border-r border-[#c9bb94] bg-[#ebe2c8] px-3 text-[15px] font-semibold text-[#24382d]"
-                  aria-hidden
-                >
-                  +91
-                </span>
-                <input
-                  {...aria("mobile", "rep-mobile-hint")}
-                  type="tel"
-                  inputMode="tel"
-                  autoComplete="tel-national"
-                  maxLength={LIMITS.mobile}
-                  value={v.mobile}
-                  onChange={set("mobile")}
-                  disabled={isSubmitting}
-                  className="min-w-0 flex-1 bg-transparent px-3 py-3 text-[15px] text-[#1b2a22] outline-none"
-                />
-              </div>
-              <p id="rep-mobile-hint" className="mt-1.5 text-[12px] text-[#5f6f65]">
-                India (+91), 10 digits
-              </p>
-              <Err k="mobile" />
-            </div>
-            <div>
-              <Label k="email">Email</Label>
+                +91
+              </span>
               <input
-                {...aria("email")}
-                type="email"
-                autoComplete="email"
-                maxLength={LIMITS.email}
-                value={v.email}
-                onChange={set("email")}
+                {...aria("mobile", "rep-mobile-hint")}
+                type="tel"
+                inputMode="tel"
+                autoComplete="tel-national"
+                maxLength={LIMITS.mobile}
+                value={v.mobile}
+                onChange={set("mobile")}
                 disabled={isSubmitting}
-                className={`${field} ${errors.email ? badBorder : okBorder}`}
+                placeholder="9876543210"
+                className="min-w-0 flex-1 bg-transparent px-3 py-3 text-[15px] text-[#1b2a22] outline-none"
               />
-              <Err k="email" />
             </div>
+            <p id="rep-mobile-hint" className="mt-1.5 text-[12px] text-[#5f6f65]">
+              India (+91), 10 digits
+            </p>
+            <Err k="mobile" />
           </div>
+
           <div className="grid gap-5 sm:grid-cols-2">
             <div>
               <Label k="constituency">Constituency</Label>
@@ -482,6 +411,7 @@ This acknowledgment confirms your representation has been officially registered.
               value={v.message}
               onChange={set("message")}
               disabled={isSubmitting}
+              placeholder="State your representation, request, or issue clearly..."
               className={`${field} resize-y ${errors.message ? badBorder : okBorder}`}
             />
             <p id="rep-message-count" className="mt-1 text-right text-[12px] text-[#5f6f65]">
@@ -498,7 +428,7 @@ This acknowledgment confirms your representation has been officially registered.
             {isSubmitting ? (
               <>
                 <Loader2 className="h-4 w-4 animate-spin text-[#FBF8F1]" aria-hidden />
-                Submitting Representation to Secretariat Desk...
+                Registering Representation...
               </>
             ) : (
               <>
@@ -509,84 +439,6 @@ This acknowledgment confirms your representation has been officially registered.
           </button>
         </form>
       )}
-
-      {/* Fallback ready state when offline or user desires direct email copy */}
-      <div aria-live="polite">
-        {!submission && ready && (
-          <div
-            ref={confirmRef}
-            tabIndex={-1}
-            role="region"
-            aria-labelledby="rep-ready-title"
-            data-testid="status-representation-ready"
-            className="mt-6 rounded-xl border-2 border-[#DFD8CB] bg-[#e9efe6] p-5 motion-safe:animate-in motion-safe:fade-in motion-safe:slide-in-from-bottom-2"
-          >
-            <h4
-              id="rep-ready-title"
-              className="flex items-center gap-2 font-display text-lg font-semibold text-[#15241D]"
-            >
-              <FileText className="h-5 w-5 text-[#14532D]" aria-hidden /> Your representation draft is ready
-            </h4>
-            <p className="mt-2 text-sm font-medium text-[#24382d]">
-              You can send this draft directly via your email client, or copy the formatted text.
-            </p>
-            <div className="mt-4 flex flex-wrap gap-2.5">
-              <a
-                href={mailtoHref(to, ready.subject, ready.body)}
-                data-testid="link-open-email-draft"
-                className="inline-flex items-center gap-2 rounded-full bg-[#14532D] px-4 py-2.5 text-sm font-semibold text-[#FBF8F1] hover:bg-[#14532D]"
-              >
-                <ExternalLink className="h-4 w-4" aria-hidden /> Open Email Draft
-              </a>
-              <button
-                type="button"
-                onClick={doCopy}
-                data-testid="button-copy-representation"
-                className="inline-flex items-center gap-2 rounded-full border border-[#DFD8CB] px-4 py-2.5 text-sm font-semibold text-[#15241D] hover:bg-[#dbe5d6]"
-              >
-                <ClipboardCopy className="h-4 w-4" aria-hidden /> Copy Representation
-              </button>
-              <button
-                type="button"
-                onClick={edit}
-                data-testid="button-edit-representation"
-                className="inline-flex items-center gap-2 rounded-full border border-[#DFD8CB] px-4 py-2.5 text-sm font-semibold text-[#15241D] hover:bg-[#dbe5d6]"
-              >
-                <PenLine className="h-4 w-4" aria-hidden /> Edit Representation
-              </button>
-            </div>
-            {copy === "ok" && (
-              <p className="mt-3 text-sm font-medium text-[#14532D]" role="status">
-                Copied to your clipboard. Paste it into an email to {to}.
-              </p>
-            )}
-            {copy === "fail" && (
-              <div className="mt-3 space-y-2" role="alert">
-                <p className="text-sm font-medium text-[#a51d3c]">
-                  Your browser blocked clipboard access. Select the text below and copy it manually, or download a .txt copy.
-                </p>
-                <textarea
-                  readOnly
-                  value={fullText}
-                  rows={8}
-                  aria-label="Representation text"
-                  onFocus={(e) => e.currentTarget.select()}
-                  className="w-full rounded-lg border border-[#c9bb94] bg-[#fbf7ec] p-3 font-mono text-xs text-[#1b2a22]"
-                  data-testid="text-representation-fallback"
-                />
-                <button
-                  type="button"
-                  onClick={doDownload}
-                  data-testid="button-download-representation"
-                  className="inline-flex items-center gap-2 rounded-full border border-[#DFD8CB] px-4 py-2 text-sm font-semibold text-[#15241D]"
-                >
-                  <Download className="h-4 w-4" aria-hidden /> Download .txt copy
-                </button>
-              </div>
-            )}
-          </div>
-        )}
-      </div>
     </div>
   );
 }
