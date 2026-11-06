@@ -8,7 +8,7 @@
     "dev:web": "pnpm --filter @workspace/srikanth-goud run dev",
     "preview": "pnpm --filter @workspace/srikanth-goud run serve",
     "preinstall": "sh -c 'rm -f package-lock.json yarn.lock'",
-    "build": "pnpm --filter @workspace/srikanth-goud run build",
+    "build": "pnpm --filter @workspace/srikanth-goud run build && node scripts/prepare-vercel-output.cjs",
     "typecheck": "pnpm --filter @workspace/srikanth-goud run typecheck"
   },
   "private": true,
