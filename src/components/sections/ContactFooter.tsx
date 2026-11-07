@@ -106,11 +106,11 @@ export function SiteFooter() {
                 <Monogram />
                 <span className="font-display text-2xl font-bold text-white">{leaderProfile.name}</span>
               </a>
-              {/* Official TRS Emblem in Footer */}
-              <div className="h-12 w-auto overflow-hidden rounded border border-[#F3BA16]/40 shadow-sm">
+              {/* Official TRS Flag in Footer */}
+              <div className="h-14 w-auto overflow-hidden rounded-xl border-2 border-[#F5C619] bg-white p-1 shadow-md">
                 <img
-                  src={`${import.meta.env.BASE_URL}assets/images/trs-official-emblem.png`}
-                  alt="Telangana Rakshana Sena"
+                  src={`${import.meta.env.BASE_URL}assets/images/trs-official-flag.png`}
+                  alt="Telangana Rakshana Sena Official Flag"
                   className="h-full w-auto object-contain"
                 />
               </div>

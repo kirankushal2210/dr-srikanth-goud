@@ -106,14 +106,18 @@ export default function Home() {
       <header className={`sticky top-0 z-40 w-full transition-all duration-300 border-b-2 border-[#F3BA16] ${scrolled ? "bg-[#1E3A8A]/98 backdrop-blur-md shadow-lg" : "bg-[#1E3A8A] shadow-md"}`}>
         <nav aria-label="Primary" className="mx-auto flex max-w-7xl items-center justify-between gap-4 px-5 py-3 lg:px-8">
           <a href="#top" className="flex min-w-0 items-center gap-3" data-testid="link-home">
-            <span className="grid h-10 w-10 shrink-0 place-items-center rounded-full border-2 border-[#F3BA16] bg-[#172554] font-display text-xs font-bold text-[#F3BA16] shadow-sm">
-              DSG
-            </span>
+            <div className="relative h-10 w-10 shrink-0 overflow-hidden rounded-xl border-2 border-[#F5C619] bg-white p-0.5 shadow-md flex items-center justify-center">
+              <img
+                src={`${import.meta.env.BASE_URL}assets/images/trs-official-flag.png`}
+                alt="TRS Official Flag"
+                className="h-full w-full object-contain"
+              />
+            </div>
             <span className="min-w-0 leading-tight">
               <span className="block truncate font-display text-[15px] font-bold text-white tracking-wide">
                 {leaderProfile.name}
               </span>
-              <span className="block truncate text-[10px] font-bold uppercase tracking-[0.2em] text-[#F3BA16]">
+              <span className="block truncate text-[10px] font-bold uppercase tracking-[0.2em] text-[#F5C619]">
                 TRS State Spokesperson &amp; Mahabubabad Incharge
               </span>
             </span>
@@ -209,10 +213,17 @@ export default function Home() {
               exit={reduce ? { opacity: 0 } : { x: "100%" }}
               transition={{ type: "tween", duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
             >
-              <div className="flex items-center justify-between border-b border-[#F3BA16]/30 p-5 bg-[#1E3A8A]">
-                <div>
-                  <span className="font-display text-lg font-bold text-white">Menu</span>
-                  <p className="text-[10px] uppercase font-bold tracking-wider text-[#F3BA16]">Telangana Rakshana Sena</p>
+              <div className="flex items-center justify-between border-b border-[#F5C619]/30 p-5 bg-[#1E3A8A]">
+                <div className="flex items-center gap-3">
+                  <img
+                    src={`${import.meta.env.BASE_URL}assets/images/trs-official-flag.png`}
+                    alt="TRS Flag"
+                    className="h-10 w-auto rounded border border-[#F5C619] shadow-sm"
+                  />
+                  <div>
+                    <span className="font-display text-lg font-bold text-white">Menu</span>
+                    <p className="text-[10px] uppercase font-bold tracking-wider text-[#F5C619]">Telangana Rakshana Sena</p>
+                  </div>
                 </div>
                 <button
                   type="button"
