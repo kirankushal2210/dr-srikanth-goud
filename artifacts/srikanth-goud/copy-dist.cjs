@@ -24,3 +24,4 @@ fs.mkdirSync(publicDir, { recursive: true });
 fs.cpSync(sourceDir, publicDir, { recursive: true, force: true });
 
 console.log('[copy-dist] Output synced to both dist/ and public/');
+

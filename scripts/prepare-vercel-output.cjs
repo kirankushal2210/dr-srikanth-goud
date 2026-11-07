@@ -40,3 +40,4 @@ if (fs.existsSync(srikanthGoudPublic)) {
 }
 
 console.log('[prepare-vercel-output] Vercel output directories prepared successfully.');
+
