@@ -68,14 +68,14 @@ function Rise({ children, delay = 0, className = "" }: { children: ReactNode; de
 
 export default function Initiatives() {
   return (
-    <section id="initiatives" aria-labelledby="initiatives-heading" className="relative overflow-hidden border-y border-[#DFD8CB]/60 bg-transparent py-24 lg:py-32">
+    <section id="initiatives" aria-labelledby="initiatives-heading" className="relative overflow-hidden border-y border-[#F3BA16]/40 bg-transparent py-24 lg:py-32">
       <div className="mx-auto max-w-7xl px-5 lg:px-8">
         <Rise className="max-w-3xl">
-          <p className="flex items-center gap-3 text-xs font-bold uppercase tracking-[0.28em] text-[#B45309]">
-            <Megaphone className="h-4 w-4" aria-hidden /> Initiatives
+          <p className="flex items-center gap-3 text-xs font-bold uppercase tracking-[0.28em] text-[#15803D]">
+            <Megaphone className="h-4 w-4 text-[#15803D]" aria-hidden /> Initiatives
           </p>
-          <h2 id="initiatives-heading" className="mt-4 font-display text-4xl font-semibold leading-[1.08] text-[#15241D] md:text-[3.4rem]">
-            Key Initiatives &amp; <span className="italic text-[#0284C7]">Frontline Advocacy</span>
+          <h2 id="initiatives-heading" className="mt-4 font-display text-4xl font-bold leading-[1.08] text-[#172554] md:text-[3.4rem]">
+            Key Initiatives &amp; <span className="italic text-[#1E3A8A] underline decoration-[#F3BA16] decoration-4 underline-offset-8">Frontline Advocacy</span>
           </h2>
           <p className="mt-5 max-w-2xl text-lg font-medium leading-relaxed text-stone-700">
             Documented interventions on the ground, followed by the policy commitments he puts before the people.
@@ -85,38 +85,38 @@ export default function Initiatives() {
         {/* I. Agitations */}
         <div className="mt-16">
           <Rise>
-            <h3 className="flex items-baseline gap-3 border-b border-[#DFD8CB] pb-4 font-display text-2xl font-semibold text-[#15241D] md:text-3xl">
-              <span className="text-sm font-bold text-[#B45309]">I.</span> Frontline Agitations &amp; Interventions
+            <h3 className="flex items-baseline gap-3 border-b-2 border-[#1E3A8A]/20 pb-4 font-display text-2xl font-bold text-[#172554] md:text-3xl">
+              <span className="text-sm font-bold text-[#15803D]">I.</span> Frontline Agitations &amp; Interventions
             </h3>
           </Rise>
           <ol className="mt-8 grid gap-6 lg:grid-cols-3">
             {CASES.map((c, i) => (
               <li key={c.title} className="min-w-0">
                 <Rise delay={0.08 * i} className="h-full">
-                  <article className="trs-card group flex h-full flex-col overflow-hidden rounded-2xl" data-testid={`card-case-${i}`}>
+                  <article className="trs-card group flex h-full flex-col overflow-hidden rounded-2xl border-2 border-[#1E3A8A]/20 bg-white/95 shadow-md transition-all duration-300 hover:border-[#1E3A8A] hover:shadow-xl" data-testid={`card-case-${i}`}>
                     {"photo" in c && c.photo ? (
                       <img src={c.photo.src} alt={c.photo.alt} loading="lazy" className="aspect-[16/10] w-full object-cover transition-transform duration-500 group-hover:scale-[1.04] motion-reduce:transform-none" />
                     ) : (
-                      <div className="relative grid aspect-[16/10] place-items-center bg-[linear-gradient(135deg,#F5F1E9,#EAE5DB)]">
-                        <Building2 className="h-14 w-14 text-[#CA8A04]/50" aria-hidden />
-                        <span className="absolute bottom-3 left-4 text-[10px] font-semibold uppercase tracking-[0.22em] text-[#4A5B52]">ESI Nacharam Hospital</span>
+                      <div className="relative grid aspect-[16/10] place-items-center bg-[#FAF2DC]">
+                        <Building2 className="h-14 w-14 text-[#1E3A8A]/40" aria-hidden />
+                        <span className="absolute bottom-3 left-4 text-[10px] font-semibold uppercase tracking-[0.22em] text-[#172554]">ESI Nacharam Hospital</span>
                       </div>
                     )}
                     <div className="flex flex-1 flex-col p-6">
                       <div className="flex items-center justify-between gap-3">
-                        <span className="text-[10px] font-bold uppercase tracking-[0.24em] text-[#A16207]">Case {String(i + 1).padStart(2, "0")} · {c.tag}</span>
-                        <span className="trs-icon grid h-10 w-10 shrink-0 place-items-center rounded-xl border border-[#CA8A04]/40 text-[#A16207]"><c.icon className="h-5 w-5" aria-hidden /></span>
+                        <span className="text-[10px] font-bold uppercase tracking-[0.24em] text-[#15803D]">Case {String(i + 1).padStart(2, "0")} · {c.tag}</span>
+                        <span className="trs-icon grid h-10 w-10 shrink-0 place-items-center rounded-xl border border-[#F3BA16] bg-[#1E3A8A]/10 text-[#1E3A8A]"><c.icon className="h-5 w-5" aria-hidden /></span>
                       </div>
-                      <h4 className="mt-4 font-display text-xl font-semibold leading-snug text-[#15241D]">{c.title}</h4>
+                      <h4 className="mt-4 font-display text-xl font-bold leading-snug text-[#172554]">{c.title}</h4>
                       <dl className="mt-5 space-y-4 text-sm leading-relaxed">
-                        <div className="border-l-2 border-[#CA8A04] pl-4">
-                          <dt className="text-[10px] font-bold uppercase tracking-[0.22em] text-[#A16207]">Context</dt>
-                          <dd className="mt-1 text-[#15241D]">{c.context}</dd>
+                        <div className="border-l-3 border-[#F3BA16] pl-4">
+                          <dt className="text-[10px] font-bold uppercase tracking-[0.22em] text-[#1E3A8A]">Context</dt>
+                          <dd className="mt-1 font-medium text-stone-700">{c.context}</dd>
                         </div>
                         {"consequence" in c && (
-                          <div className="border-l-2 border-[#0284C7] pl-4">
-                            <dt className="text-[10px] font-bold uppercase tracking-[0.22em] text-[#0284C7]">Consequence</dt>
-                            <dd className="mt-1 text-[#15241D]">{c.consequence}</dd>
+                          <div className="border-l-3 border-[#15803D] pl-4">
+                            <dt className="text-[10px] font-bold uppercase tracking-[0.22em] text-[#15803D]">Consequence</dt>
+                            <dd className="mt-1 font-medium text-stone-700">{c.consequence}</dd>
                           </div>
                         )}
                       </dl>
@@ -130,39 +130,39 @@ export default function Initiatives() {
 
         {/* II. Charter */}
         <Rise className="mt-20 lg:mt-28">
-          <div className="relative overflow-hidden rounded-3xl bg-[#f3ecdc] text-[#15241D] ring-1 ring-[#CA8A04]" data-testid="banner-charter">
-            <div className="trs-tricolor-top h-2" aria-hidden />
+          <div className="relative overflow-hidden rounded-3xl bg-[#1E3A8A] text-white shadow-2xl ring-2 ring-[#F3BA16]" data-testid="banner-charter">
+            <div className="h-3 bg-gradient-to-r from-[#F3BA16] via-[#15803D] to-[#F3BA16]" aria-hidden />
             <div className="grid gap-10 p-6 sm:p-10 lg:grid-cols-[minmax(0,4fr)_minmax(0,8fr)] lg:p-14">
               <div className="min-w-0">
-                <p className="text-xs font-bold uppercase tracking-[0.28em] text-[#B45309]">II. Policy commitments</p>
-                <h3 className="mt-4 break-words font-display text-[clamp(1.75rem,3vw,2.75rem)] font-semibold leading-tight text-[#15241D]">Paanchajanyam</h3>
-                <p className="mt-3 font-display text-2xl italic text-[#B45309]">Charter of 5 Guarantees</p>
-                <p className="mt-6 text-sm font-medium leading-relaxed text-stone-700">
+                <p className="text-xs font-bold uppercase tracking-[0.28em] text-[#F3BA16]">II. Policy commitments</p>
+                <h3 className="mt-4 break-words font-display text-[clamp(1.75rem,3vw,2.75rem)] font-bold leading-tight text-white">Paanchajanyam</h3>
+                <p className="mt-3 font-display text-2xl italic text-[#F3BA16]">Charter of 5 Guarantees</p>
+                <p className="mt-6 text-sm font-medium leading-relaxed text-blue-100">
                   Five core policy commitments covering education, healthcare, agriculture, youth opportunity, and social justice.
                 </p>
-                <span className="mt-6 inline-flex rounded-full border border-[#15241D] px-3 py-1 text-[10px] font-bold uppercase tracking-[0.22em] text-[#15241D]">Policy charter</span>
+                <span className="mt-6 inline-flex rounded-full border border-[#F3BA16] bg-[#172554] px-4 py-1.5 text-[11px] font-bold uppercase tracking-[0.22em] text-[#F3BA16]">Policy charter</span>
               </div>
-              <ol className="min-w-0 divide-y divide-[#CA8A04]/40 border-y border-[#CA8A04]/40" aria-label="Charter of 5 Guarantees">
+              <ol className="min-w-0 divide-y divide-white/20 border-y border-white/20" aria-label="Charter of 5 Guarantees">
                 {CHARTER.map((g, i) => (
-                  <li key={g.en} className="grid grid-cols-[auto_minmax(0,1fr)] gap-4 py-5 sm:gap-6" data-testid={`item-guarantee-${i}`}>
-                    <span className="font-display text-4xl font-semibold leading-none text-[#B45309] sm:text-5xl" aria-hidden>{i + 1}</span>
+                  <li key={g.en} className="grid grid-cols-[auto_minmax(0,1fr)] gap-4 py-6 sm:gap-6" data-testid={`item-guarantee-${i}`}>
+                    <span className="font-display text-4xl font-bold leading-none text-[#F3BA16] sm:text-5xl" aria-hidden>{i + 1}</span>
                     <div className="min-w-0">
-                      <p className="text-[10px] font-bold uppercase tracking-[0.22em] text-[#B45309]"><span className="sr-only">Guarantee {i + 1}: </span>Commitment</p>
-                      <h4 className="mt-1 flex items-start gap-2 font-display text-xl font-semibold leading-snug text-[#15241D] sm:text-2xl">
-                        <g.icon className="mt-1 h-5 w-5 shrink-0 text-[#B45309]" aria-hidden />{g.en}
+                      <p className="text-[10px] font-bold uppercase tracking-[0.22em] text-[#F3BA16]/90"><span className="sr-only">Guarantee {i + 1}: </span>Commitment</p>
+                      <h4 className="mt-1 flex items-start gap-2 font-display text-xl font-bold leading-snug text-white sm:text-2xl">
+                        <g.icon className="mt-1 h-5 w-5 shrink-0 text-[#F3BA16]" aria-hidden />{g.en}
                       </h4>
-                      {"te" in g && g.te && <p lang="te" className="mt-1 text-base font-medium text-[#0284C7]">{g.te}</p>}
+                      {"te" in g && g.te && <p lang="te" className="mt-1 text-base font-semibold text-[#F3BA16]">{g.te}</p>}
                       {"points" in g && g.points && (
                         <ul className="mt-4 grid grid-cols-1 gap-4 md:grid-cols-3">
                           {g.points.map((p) => (
                             <li
                               key={p.v}
-                              className="rounded-2xl border border-[#E2DDD5] bg-[#FAF8F5] p-5 shadow-sm transition-all duration-200 hover:border-[#CA8A04]/50 hover:shadow-md"
+                              className="rounded-2xl border border-white/20 bg-white/10 p-5 shadow-sm backdrop-blur-xs transition-all duration-200 hover:border-[#F3BA16]"
                             >
-                              <span className="block font-display text-2xl font-bold text-[#B45309] sm:text-3xl">
+                              <span className="block font-display text-2xl font-bold text-[#F3BA16] sm:text-3xl">
                                 {p.k}
                               </span>
-                              <span className="mt-1 block text-sm font-medium leading-snug text-[#4A5568]">
+                              <span className="mt-1 block text-sm font-medium leading-snug text-blue-100">
                                 {p.v}
                               </span>
                             </li>

@@ -1,0 +1,32 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 500 500" width="500" height="500">
+  <!-- Outer Gold Decorative Ring -->
+  <circle cx="250" cy="250" r="235" fill="none" stroke="#F3BA16" stroke-width="6" opacity="0.4" />
+  <circle cx="250" cy="250" r="225" fill="none" stroke="#1E3A8A" stroke-width="3" stroke-dasharray="6,6" opacity="0.3" />
+  
+  <!-- Subtle Yellow Backdrop Glow -->
+  <circle cx="250" cy="250" r="215" fill="#F3BA16" opacity="0.12" />
+
+  <!-- Telangana State Stylized Silhouette in Deep Royal Blue -->
+  <path d="M 235 95 
+           C 260 90, 290 105, 310 120 
+           C 335 140, 365 155, 385 185 
+           C 405 215, 395 245, 385 275 
+           C 375 305, 360 330, 340 355 
+           C 315 385, 280 405, 250 415 
+           C 220 420, 195 400, 175 380 
+           C 150 355, 130 330, 120 295 
+           C 110 260, 115 225, 130 195 
+           C 145 165, 170 140, 195 120 
+           Z" 
+        fill="#1E3A8A" 
+        stroke="#F3BA16" 
+        stroke-width="5" />
+  
+  <!-- Stylized TRS Typography in High Contrast White -->
+  <g transform="translate(250, 260)" text-anchor="middle" dominant-baseline="middle">
+    <!-- Drop shadow for lettering -->
+    <text font-family="'Space Grotesk', 'Arial Black', sans-serif" font-size="78" font-weight="900" fill="#0F172A" letter-spacing="6" opacity="0.3" x="2" y="4">TRS</text>
+    <text font-family="'Space Grotesk', 'Arial Black', sans-serif" font-size="78" font-weight="900" fill="#FFFFFF" letter-spacing="6" stroke="#1E3A8A" stroke-width="2">TRS</text>
+    <text font-family="'DM Sans', sans-serif" font-size="14" font-weight="700" fill="#F3BA16" letter-spacing="4" y="52">TELANGANA RAKSHANA SENA</text>
+  </g>
+</svg>
