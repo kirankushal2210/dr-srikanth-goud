@@ -118,6 +118,10 @@ globalThis.__dirname = __bannerPath.dirname(globalThis.__filename);
     },
   });
 
+  const { copyFileSync } = await import("node:fs");
+  copyFileSync(path.resolve(distDir, "index.mjs"), path.resolve(distDir, "index.js"));
+  copyFileSync(path.resolve(distDir, "index.mjs"), path.resolve(distDir, "app.js"));
+  copyFileSync(path.resolve(distDir, "index.mjs"), path.resolve(distDir, "server.js"));
 }
 
 buildAll().catch((err) => {

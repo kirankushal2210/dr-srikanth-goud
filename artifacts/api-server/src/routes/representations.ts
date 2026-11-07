@@ -6,6 +6,7 @@ import {
   getRepresentationByReference,
 } from "../lib/representationStore";
 import { sendRepresentationEmail, SECRETARIAT_EMAIL } from "../lib/emailService";
+import { logger } from "../lib/logger";
 
 const router: IRouter = Router();
 
@@ -57,7 +58,7 @@ router.post("/representations", async (req, res) => {
       emailDispatch,
     });
   } catch (error) {
-    req.log?.error?.({ error }, "Error creating representation");
+    logger.error({ error }, "Error creating representation");
     return res.status(500).json({
       success: false,
       message: "An internal server error occurred while processing your representation",
